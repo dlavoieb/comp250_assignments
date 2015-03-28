@@ -1,6 +1,0 @@
-[submodule "comp250_assignment1"]
-	path = comp250_assignment1
-	url = git@github.com:dlavoieb/comp250_assignment1.git
-[submodule "comp250_assignment2"]
-	path = comp250_assignment2
-	url = git@github.com:dlavoieb/comp250_assignment2.git
