@@ -217,7 +217,7 @@ public class Search {
         {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            br.readLine(); //skip the first line
+
             String stringRead = br.readLine();
 
             while( stringRead != null )
