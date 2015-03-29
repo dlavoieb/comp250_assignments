@@ -16,7 +16,7 @@ import java.util.*;
 
 /* A Simple Search Engine exploring subnetwork of McGill University's webpages.
  * 	
- *	Complete the code provided as part of the assignment package. Fill in the \\TODO sections
+ *	Complete the code provided as part of the assignment package.
  *  
  *  Do not change any of the function signatures. However, you can write additional helper functions 
  *  and test functions if you want.
@@ -81,7 +81,7 @@ public class Search {
 
     /**
      * Do not change this method. You don't have to do anything here.
-     * @return
+     * @return size of the graph
      */
     public int getGraphSize(){
         return this.graph.size();
@@ -90,8 +90,8 @@ public class Search {
     /**
      * This method will either call the BFS or DFS algorithms to explore your graph and search for the
      * keyword specified. You do not have to implement anything here. Do not change the code.
-     * @param pKeyword
-     * @param pType
+     * @param pKeyword keyword to compare
+     * @param pType search type
      */
     public void search(String pKeyword, String pType){
         resetVertexVisits();
@@ -120,7 +120,7 @@ public class Search {
     /**
      * Do not change the code of this method. This is used for testing purposes. It follows the
      * your graph search traversal track to ensure a BFS implementation is performed.
-     * @return
+     * @return textual version of the BFS traversal order
      */
     public String getBFSInspector(){
         String result = "";
@@ -134,7 +134,7 @@ public class Search {
     /**
      * Do not change the code of this method. This is used for testing purposes. It follows the
      * your graph search traversal track to ensure a DFS implementation is performed.
-     * @return
+     * @return textual version of the DFS traversal order
      */
     public String getDFSInspector(){
         String result = "";
@@ -147,7 +147,7 @@ public class Search {
     /**
      * This method prints the search results in order of most occurrences. It utilizes
      * a priority queue (wordOccurrenceQueue). You do not need to change the code.
-     * @return
+     * @return the number of hits
      */
     public int displaySearchResults(){
 
@@ -169,7 +169,7 @@ public class Search {
 
     /**
      * This method returns the graph instance. You do not need to change the code.
-     * @return
+     * @return the member graph
      */
     public ArrayList<Vertex> getGraph(){
         return this.graph;
@@ -177,10 +177,10 @@ public class Search {
 
     /**
      * This method takes in the 2 file paths and creates your graph. Each Vertex must be
-     * added to the graph arraylist. To implement an edge (v1, v2), add v2 to v1.neighbors list
+     * added to the graph array list. To implement an edge (v1, v2), add v2 to v1.neighbors list
      * by calling v1.addNeighbor(v2)
-     * @param pVerticesFilePath
-     * @param pEdgesFilePath
+     * @param pVerticesFilePath file path to vertices file
+     * @param pEdgesFilePath file path to edge file
      */
     public void loadGraph(String pVerticesFilePath, String pEdgesFilePath){
 
@@ -246,8 +246,8 @@ public class Search {
 
     /**
      * This method must implement the Iterative Breadth-First Search algorithm. Refer to the lecture
-     * notes for the exact implementation. Fill in the //TODO lines
-     * @param pKeyword
+     * notes for the exact implementation.
+     * @param pKeyword keyword to compare
      */
     public void Iterative_BFS(String pKeyword){
         ArrayList<Vertex> BFSQ = new ArrayList<Vertex>();	//This is your breadth-first search queue.
@@ -262,7 +262,7 @@ public class Search {
 
             //Do other search shit in here
             //find number of occurrences in page
-            int occurrence = findOccurrences(v, pKeyword);
+            int occurrence = findContains(v, pKeyword);
             SearchResult r = new SearchResult(v.getURL(), occurrence);
             wordOccurrenceQueue.add(r);
 
@@ -279,6 +279,7 @@ public class Search {
     }
 
     /**
+     * Elegant find algorithm if we look for exact match
      * find the number of occurrences of a keyword in the text of the vertex
      * @param vertex vertex with list of words
      * @param keyword keyword to compare
@@ -297,12 +298,12 @@ public class Search {
             int end = index + 1;
 
             while ((start >=0 && end < listWords.size()) &&
-                    (listWords.get(start).equals(keyword) && listWords.get(end).equals(keyword) )){
+                    (listWords.get(start).equals(keyword) || listWords.get(end).equals(keyword) )){
                 if (listWords.get(start).equals(keyword)){
                     start--;
                 }
                 if (listWords.get(end).equals(keyword)){
-                    end--;
+                    end++;
                 }
             }
             return end-start-1;
@@ -312,16 +313,54 @@ public class Search {
     }
 
     /**
+     * boring linear search for contains matches
+     * @param vertex vertex with list of words
+     * @param keyword keyword to compare
+     * @return the number of occurrences
+     */
+    public int findContains(Vertex vertex, String keyword){
+        if (keyword.equals("")){
+            return 0;
+        }
+        keyword = keyword.toLowerCase();
+        int count = 0;
+        for (String word : vertex.getWords()){
+            if (word.contains(keyword)) count++;
+        }
+
+        return count;
+    }
+
+    /**
      * This method must implement the Iterative Depth-First Search algorithm. Refer to the lecture
-     * notes for the exact implementation. Fill in the //TODO lines
-     * @param pKeyword
+     * notes for the exact implementation.
+     * @param pKeyword keyword to compare
      */
     public void Iterative_DFS(String pKeyword){
         Stack<Vertex> DFSS = new Stack<Vertex>();	//This is your depth-first search stack.
         Vertex start = graph.get(0);				//We will always start with this vertex in a graph search
 
-//TODO: Complete the code. Follow the same instructions that are outlined in the Iterative_BFS() method.		
+        DFSS.push(start);
+        DFS_inspector.add(start);
 
+        while (!DFSS.isEmpty()) {
+            Vertex v = DFSS.pop();
+            if (!v.isVisited()) {
+
+                //Do other search shit in here
+                //find number of occurrences in page
+                int occurrence = findContains(v, pKeyword);
+                SearchResult r = new SearchResult(v.getURL(), occurrence);
+                wordOccurrenceQueue.add(r);
+
+                v.setVisited();
+
+                for (Vertex vEdge : v.getNeighbors()) {
+                    DFSS.push(vEdge);
+                    DFS_inspector.add(vEdge);
+                }
+            }
+        }
     }
 
 
