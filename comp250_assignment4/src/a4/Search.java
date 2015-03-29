@@ -1,10 +1,9 @@
 package a4;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Scanner;
-import java.util.Stack;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 
 
@@ -56,8 +55,8 @@ public class Search {
      * the 2 filepaths and toggle between "DFS" and "BFS" implementations.
      */
     public static void main(String[] args) {
-        String pathToVertices = "vertices.csv";
-        String pathToEdges = "edges.csv";
+        String pathToVertices = "/Users/David/repositories/comp250_assignments/comp250_assignment4/vertices.csv";
+        String pathToEdges = "/Users/David/repositories/comp250_assignments/comp250_assignment4/edges.csv";
 
         Search mcgill_network = new Search();
         mcgill_network.loadGraph(pathToVertices, pathToEdges);
@@ -185,28 +184,65 @@ public class Search {
      */
     public void loadGraph(String pVerticesFilePath, String pEdgesFilePath){
 
-        // **** LOADING VERTICES ***///
+        // **** LOADING VERTICES *** //
+        ArrayList<String[]> listVerticiesRaw = readFile(pVerticesFilePath);
 
-//TODO: Load the vertices from the pVerticesFilePath into this.graph. A Vertex needs a url and the words on the page. The 
-//		first column of the vertices.csv file contains the urls. The other columns contain the words on the pages, one word per column.
-//		Each row is 1 page.
+        for (String[] line : listVerticiesRaw){
+            Vertex newVertex = new Vertex(line[0]);
+            for (int i = 1; i < line.length; i++) {
+                newVertex.addWord(line[i]);
+            }
+            graph.add(newVertex);
+        }
+        // **** END LOADING VERTICES *** //
 
-        // **** END LOADING VERTICES ***///
 
-
-
-        // **** LOADING EDGES ***///
-
-//TODO: Load the edges from edges.csv. The file contains 2 columns. An edge is a link from column 1 to column 2.
-//		Each row is an edge. Read the edges.csv file line by line. For every line, find the two Vertices that 
-//		contain the urls in columns 1 and 2. Add an edge from Vertex v1 to Vertex v2 by calling v1.addNeighbor(v2); 
-
-        // **** END LOADING EDGES ***///
+        // **** LOADING EDGES *** //
+        ArrayList<String[]> listEdgesRaw = readFile(pEdgesFilePath);
+        for (String[] line : listEdgesRaw){
+            Vertex v1 = findVertex(line[0]);
+            Vertex v2 = findVertex(line[1]);
+            if (v1 != null && v2 != null){
+                v1.addNeighbor(v2);
+            }
+        }
+        // **** END LOADING EDGES *** //
 
     }
 
 
+    public ArrayList<String[]> readFile(String file){
+        ArrayList<String []> lstLines = new ArrayList<String[]>();
+        try
+        {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            br.readLine(); //skip the first line
+            String stringRead = br.readLine();
 
+            while( stringRead != null )
+            {
+                lstLines.add( stringRead.split(","));
+                // read the next line
+                stringRead = br.readLine();
+            }
+            br.close();
+            fr.close();
+        }
+
+        catch(IOException ioe){
+            ioe.printStackTrace();
+        }
+
+        return lstLines;
+	}
+
+    public Vertex findVertex(String url){
+        for (Vertex vertex : graph){
+            if (vertex.getURL().equals(url)) return vertex;
+        }
+        return null;
+    }
 
     /**
      * This method must implement the Iterative Breadth-First Search algorithm. Refer to the lecture
@@ -293,6 +329,11 @@ public class Search {
 
         public void addNeighbor(Vertex pVertex){
             this.neighbors.add(pVertex);
+        }
+
+        @Override
+        public String toString(){
+            return this.aUrl;
         }
 
     }
