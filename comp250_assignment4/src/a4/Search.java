@@ -253,19 +253,62 @@ public class Search {
         ArrayList<Vertex> BFSQ = new ArrayList<Vertex>();	//This is your breadth-first search queue.
         Vertex start = graph.get(0);						//We will always start with this vertex in a graph search
 
-        start.setVisited();
         BFSQ.add(start);
         BFS_inspector.add(start);
+        start.setVisited();
 
-//TODO: Complete the Code. Please add the line BFS_inspector.add(vertex); immediately after any insertion to your Queue BFSQ.add(vertex); This
-//		is used for testing the validity of your code. See the above lines.
+        while (!BFSQ.isEmpty()){
+            Vertex v = BFSQ.remove(0);
 
+            //Do other search shit in here
+            //find number of occurrences in page
+            int occurrence = findOccurrences(v, pKeyword);
+            SearchResult r = new SearchResult(v.getURL(), occurrence);
+            wordOccurrenceQueue.add(r);
 
-//TODO: When you explore a page, count the number of occurrences of the pKeyword on that page. You can use the String.contains() method to count.
-//		Save your results into a SearchResult object "SearchResult r = new SearchResult(vertex.getURL(), occurrence);"
-//		Also, add the SearchResult into this.wordOccurrenceQueue queue.
+            for (Vertex vEdge : v.getNeighbors()){
+                if (!vEdge.isVisited()){
+                    BFSQ.add(vEdge);
+                    BFS_inspector.add(vEdge);
+                    vEdge.setVisited();
 
+               }
+            }
+        }
 
+    }
+
+    /**
+     * find the number of occurrences of a keyword in the text of the vertex
+     * @param vertex vertex with list of words
+     * @param keyword keyword to compare
+     * @return the number of occurrences
+     */
+    public int findOccurrences(Vertex vertex, String keyword){
+        // sort, binary search to find word,
+        // then explore before and after to find replicas
+
+        ArrayList<String> listWords = new ArrayList<String>(vertex.getWords());
+        Collections.sort(listWords);
+
+        int index = Collections.binarySearch(listWords, keyword);
+        if (index >= 0){
+            int start = index - 1;
+            int end = index + 1;
+
+            while ((start >=0 && end < listWords.size()) &&
+                    (listWords.get(start).equals(keyword) && listWords.get(end).equals(keyword) )){
+                if (listWords.get(start).equals(keyword)){
+                    start--;
+                }
+                if (listWords.get(end).equals(keyword)){
+                    end--;
+                }
+            }
+            return end-start-1;
+        }
+
+        return 0;
     }
 
     /**
@@ -311,7 +354,7 @@ public class Search {
             this.visited = false;
         }
 
-        public boolean getVisited(){
+        public boolean isVisited(){
             return this.visited;
         }
 
