@@ -55,8 +55,8 @@ public class Search {
      * the 2 filepaths and toggle between "DFS" and "BFS" implementations.
      */
     public static void main(String[] args) {
-        String pathToVertices = "/Users/David/repositories/comp250_assignments/comp250_assignment4/vertices.csv";
-        String pathToEdges = "/Users/David/repositories/comp250_assignments/comp250_assignment4/edges.csv";
+        String pathToVertices = "vertices.csv";
+        String pathToEdges = "edges.csv";
 
         Search mcgill_network = new Search();
         mcgill_network.loadGraph(pathToVertices, pathToEdges);
@@ -259,8 +259,7 @@ public class Search {
     }
 
     /**
-     * This method must implement the Iterative Breadth-First Search algorithm. Refer to the lecture
-     * notes for the exact implementation.
+     * This method implements the Iterative Breadth-First Search algorithm.
      * @param pKeyword keyword to compare
      */
     public void Iterative_BFS(String pKeyword){
@@ -347,8 +346,7 @@ public class Search {
     }
 
     /**
-     * This method must implement the Iterative Depth-First Search algorithm. Refer to the lecture
-     * notes for the exact implementation.
+     * This method implements the Iterative Depth-First Search algorithm.
      * @param pKeyword keyword to compare
      */
     public void Iterative_DFS(String pKeyword){
@@ -362,7 +360,6 @@ public class Search {
             Vertex v = DFSS.pop();
             if (!v.isVisited()) {
 
-                //Do other search shit in here
                 //find number of occurrences in page
                 int occurrence = findContains(v, pKeyword);
                 SearchResult r = new SearchResult(v.getURL(), occurrence);
