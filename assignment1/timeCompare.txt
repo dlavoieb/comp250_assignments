@@ -1,0 +1,10 @@
+Execution time for size: 10 double for: 2
+Execution time for size: 10 bin search: 0
+Execution time for size: 100 double for: 1
+Execution time for size: 100 bin search: 1
+Execution time for size: 1000 double for: 14
+Execution time for size: 1000 bin search: 1
+Execution time for size: 10000 double for: 177
+Execution time for size: 10000 bin search: 4
+Execution time for size: 100000 double for: 12536
+Execution time for size: 100000 bin search: 25

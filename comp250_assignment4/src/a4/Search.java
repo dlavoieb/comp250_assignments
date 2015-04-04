@@ -14,7 +14,7 @@ import java.util.*;
 
 
 
-/* A Simple Search Engine exploring subnetwork of McGill University's webpages.
+/** A Simple Search Engine exploring subnetwork of McGill University's webpages.
  * 	
  *	Complete the code provided as part of the assignment package.
  *  
@@ -188,9 +188,16 @@ public class Search {
         ArrayList<String[]> listVerticiesRaw = readFile(pVerticesFilePath);
 
         for (String[] line : listVerticiesRaw){
-            Vertex newVertex = new Vertex(line[0]);
-            for (int i = 1; i < line.length; i++) {
-                newVertex.addWord(line[i]);
+            Vertex newVertex;
+            try {
+                newVertex = new Vertex(line[0]);
+
+                for (int i = 1; i < line.length; i++) {
+                    newVertex.addWord(line[i]);
+                }
+            }
+            catch (IndexOutOfBoundsException e){
+                continue;
             }
             graph.add(newVertex);
         }
@@ -200,9 +207,16 @@ public class Search {
         // **** LOADING EDGES *** //
         ArrayList<String[]> listEdgesRaw = readFile(pEdgesFilePath);
         for (String[] line : listEdgesRaw){
-            Vertex v1 = findVertex(line[0]);
-            Vertex v2 = findVertex(line[1]);
-            if (v1 != null && v2 != null){
+            Vertex v1;
+            Vertex v2;
+            try {
+                v1 = findVertex(line[0]);
+                v2 = findVertex(line[1]);
+            }
+            catch (IndexOutOfBoundsException e){
+                continue;
+            }
+            if (v1 != null && v2 != null) {
                 v1.addNeighbor(v2);
             }
         }
@@ -290,6 +304,7 @@ public class Search {
         // then explore before and after to find replicas
 
         ArrayList<String> listWords = new ArrayList<String>(vertex.getWords());
+        //duplicate array list to leave initial list unchanged to not break unit tests
         Collections.sort(listWords);
 
         int index = Collections.binarySearch(listWords, keyword);
