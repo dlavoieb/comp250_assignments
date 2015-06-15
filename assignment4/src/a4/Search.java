@@ -8,9 +8,26 @@ import java.util.*;
 
 
 /* ACADEMIC INTEGRITY STATEMENT
- * 
- * Paste the block here.
- */
+*
+* By submitting this file, we state that all group members associated
+* with the assignment understand the meaning and consequences of cheating,
+* plagiarism and other academic offenses under the Code of Student Conduct
+* and Disciplinary Procedures (see www.mcgill.ca/students/srr for more information).
+*
+* By submitting this assignment, we state that the members of the group
+* associated with this assignment claim exclusive credit as the authors of the
+* content of the file (except for the solution skeleton provided).
+*
+* In particular, this means that no part of the solution originates from:
+* - anyone not in the assignment group
+* - Internet resources of any kind.
+*
+* This assignment is subject to inspection by plagiarism detection software.
+*
+* Evidence of plagiarism will be forwarded to the Faculty of Science's disciplinary
+* officer.
+*/
+
 
 
 
@@ -33,7 +50,6 @@ import java.util.*;
  *  An edge (v1,v2) is link from v1 to v2. It is NOT a link from v2 to v1.
  * 
  */
-
 public class Search {
 
     private ArrayList<Vertex> graph;
